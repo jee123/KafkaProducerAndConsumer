@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ConsumerInstance implements Runnable{
     private final KafkaConsumer<byte[], byte[]> consumer;
     private final List<String> topics;
-    //map that stores the record partition id and timestamp, value and offset associated with it.
+    //map that stores the record attribute name as key and timestamp, record value and offset as value.
     private ConcurrentHashMap<String , Object> map = new ConcurrentHashMap<>();
     private int port;
     private String host;
@@ -49,9 +49,7 @@ public class ConsumerInstance implements Runnable{
 
 
     /**
-     * logic for each thread that includes populating the map,
-     * filling up the ByteBuffer with records from kafka topic and
-     * finally saving them in xenon.
+     * logic for each thread that includes subscribing to topic, polling records and populating the map.
      */
     @Override
     public void run() {
@@ -71,7 +69,7 @@ public class ConsumerInstance implements Runnable{
 
 
     /**
-     * This method creates a hash that maps the sidValue to the record partition.
+     * This method gets records belonging to same partition id and pushed them to the map.
      *
      * @param records : polled records from kafka topic.
      */
@@ -91,7 +89,7 @@ public class ConsumerInstance implements Runnable{
     }
 
     /**
-     * populate hashmap using the partition id of record as key.
+     * populate hashmap using record attribiute names as key.
      *
      * @param partitionRecords : record/records that belong to a particular partition id.
      */
@@ -107,7 +105,7 @@ public class ConsumerInstance implements Runnable{
 
 
     /**
-     * wake up consumer, exit polling loop and close dataset in xenon.
+     * wake up consumer and exit polling loop.
      */
     public void shutdown() {
         System.out.println("DEBUG -> Inside shutdown()");
