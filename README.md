@@ -16,3 +16,13 @@
 <p align="center">                                           
 ©Apache Kafka documentation
  </p>        
+   
+   ### Compiling:    
+   ```bash
+     mvn compile  
+   ```
+      
+   ### Execute:
+   ```bash  
+     mvn exec:java -Dexec.mainClass=com.kafka.consumer.tushar.ConsumerMain -Dexec.args=$TOPIC_NAME  
+   ```
